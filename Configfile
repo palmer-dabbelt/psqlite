@@ -1,0 +1,29 @@
+LANGUAGES += c++
+LANGUAGES += h
+LANGUAGES += bash
+LANGUAGES += pkgconfig
+
+LANGUAGES   += c++
+COMPILEOPTS += -Wall
+COMPILEOPTS += -Wextra
+COMPILEOPTS += -pedantic
+COMPILEOPTS += -std=c++11
+COMPILEOPTS += -Werror
+
+LANGUAGES   += pkgconfig
+LINKOPTS    += -Sobj/proc/version-pc.sed
+
+LANGUAGES   += c++
+COMPILEOPTS += -Isrc
+
+# Try to match this with git's version number
+GENERATE    += version.h
+GENERATE    += version-pc.sed
+
+# The main library
+LIBRARIES   += libpsqlite.so
+CONFIG      += libpsqlite_sources
+CONFIG      += libpsqlite_headers
+LIBRARIES   += pkgconfig/psqlite.pc
+SOURCES     += psqlite/psqlite.pc
+

@@ -1,0 +1,11 @@
+prefix=@@pconfigure_prefix@@
+exec_prefix=@@pconfigure_prefix@@
+libdir=${prefix}/@@pconfigure_libdir@@
+includedir=${prefix}/@@pconfigure_hdrdir@@
+
+Name: psqlite
+Description: A C++ wrapper for SQLite3
+Version: @@pinclude_version@@
+Libs: -Wl,-rpath,${libdir} -L${libdir} -lpsqlite
+Cflags: -I${includedir} 
+URL: http://dabbelt.com/~palmer/software/psqlite/
