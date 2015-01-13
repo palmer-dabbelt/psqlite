@@ -27,6 +27,7 @@
 namespace psqlite {
     enum class error_code {
         SUCCESS = 0,
+        FAILED_UNIQUE = 19,
     };
 }
 

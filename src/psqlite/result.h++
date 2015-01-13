@@ -54,6 +54,7 @@ namespace psqlite {
          * cooresponds to this command.  Note that you can only
          * call this _after_ set_error()! */
         enum error_code return_value(void) const;
+        const std::string &return_string(void) const { return _return_string; }
 
         /* This actually finalizes the construction of the result
          * and makes it usable. */

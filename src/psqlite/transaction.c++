@@ -37,6 +37,13 @@ transaction::~transaction(void)
     switch (resp->return_value()) {
     case error_code::SUCCESS:
         break;
+
+        /* These error codes can't actually happen. */
+    case error_code::FAILED_UNIQUE:
+        fprintf(stderr, "Error closing transaction: '%s'\n",
+                resp->return_string().c_str());
+        abort();
+        break;
     }
 }
 

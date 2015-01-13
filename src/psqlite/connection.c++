@@ -511,6 +511,13 @@ connection::exclusive_transaction(void)
         switch (out->return_value()) {
         case error_code::SUCCESS:
             break;
+
+            /* These error codes can't actually happen. */
+        case error_code::FAILED_UNIQUE:
+            fprintf(stderr, "Error opening transaction: '%s'\n",
+                    out->return_string().c_str());
+            abort();
+            break;
         }
     }
 
@@ -557,6 +564,13 @@ connection::immediate_transaction(void)
         switch (out->return_value()) {
         case error_code::SUCCESS:
             break;
+
+            /* These error codes can't actually happen. */
+        case error_code::FAILED_UNIQUE:
+            fprintf(stderr, "Error opening transaction: '%s'\n",
+                    out->return_string().c_str());
+            abort();
+            break;
         }
     }
 
@@ -602,6 +616,13 @@ connection::deferred_transaction(void)
 
         switch (out->return_value()) {
         case error_code::SUCCESS:
+            break;
+
+            /* These error codes can't actually happen. */
+        case error_code::FAILED_UNIQUE:
+            fprintf(stderr, "Error opening transaction: '%s'\n",
+                    out->return_string().c_str());
+            abort();
             break;
         }
     }
