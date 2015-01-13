@@ -95,7 +95,9 @@ result::ptr connection::select(const table::ptr& table,
             nformat[i+1] = 'q';
 
     /* Here we format the string to avoid injection attacks. */
-    size_t query_length = strlen(nformat) * 10 + 1;
+    va_list sargs; va_copy(sargs, args);
+    char test_args[2];
+    size_t query_length = vsnprintf(test_args, 2, format, sargs) + 1;
     char *query = new char[query_length];
     sqlite3_vsnprintf(query_length, query, nformat, args);
 
@@ -232,7 +234,9 @@ result::ptr connection::replace(const table::ptr& table,
             nformat[i+1] = 'q';
 
     /* Here we format the string to avoid injection attacks. */
-    size_t query_length = strlen(nformat) * 10 + 1;
+    va_list sargs; va_copy(sargs, args);
+    char test_args[2];
+    size_t query_length = vsnprintf(test_args, 2, format, sargs) + 1;
     char *query = new char[query_length];
     sqlite3_vsnprintf(query_length, query, nformat, args);
 
@@ -325,7 +329,9 @@ result::ptr connection::remove(const table::ptr& table,
             nformat[i+1] = 'q';
 
     /* Here we format the string to avoid injection attacks. */
-    size_t query_length = strlen(nformat) * 10 + 1;
+    va_list sargs; va_copy(sargs, args);
+    char test_args[2];
+    size_t query_length = vsnprintf(test_args, 2, format, sargs) + 1;
     char *query = new char[query_length];
     sqlite3_vsnprintf(query_length, query, nformat, args);
 
@@ -397,7 +403,9 @@ result::ptr connection::clear(const table::ptr& table,
             nformat[i+1] = 'q';
 
     /* Here we format the string to avoid injection attacks. */
-    size_t query_length = strlen(nformat) * 10 + 1;
+    va_list sargs; va_copy(sargs, args);
+    char test_args[2];
+    size_t query_length = vsnprintf(test_args, 2, format, sargs) + 1;
     char *query = new char[query_length];
     sqlite3_vsnprintf(query_length, query, nformat, args);
 
