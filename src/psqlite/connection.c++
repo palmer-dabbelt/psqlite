@@ -164,18 +164,23 @@ result::ptr connection::insert(const table::ptr& table,
 {
     std::string command = "INSERT INTO " + table->name() + " (";
     for (const auto& column: row->columns()) {
-        char format[BUFFER_SIZE];
-        sqlite3_snprintf(BUFFER_SIZE, format, "%s",
-                         column.c_str());
+        auto format = new char[column.size() + 10];
+        sqlite3_snprintf(column.size() + 10,
+                         format, "%s",
+                         column.c_str()
+            );
         command = command + format + ", ";
+        delete[] format;
     }
     command.replace(strlen(command.c_str())-2, 1, "\0");
     command = command + ") VALUES (";
     for (const auto& column: row->columns()) {
-        char format[BUFFER_SIZE];
-        sqlite3_snprintf(BUFFER_SIZE, format, "'%q'",
+        auto format = new char[row->value(column).size() + 10];
+        sqlite3_snprintf(row->value(column).size() + 10,
+                         format, "'%q'",
                          row->value(column).c_str());
         command = command + format + ", ";
+        delete[] format;
     }
     command.replace(strlen(command.c_str())-2, 1, "\0");
     command = command + ")";
