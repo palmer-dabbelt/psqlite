@@ -6,6 +6,7 @@ includedir=${prefix}/@@pconfigure_hdrdir@@
 Name: psqlite
 Description: A C++ wrapper for SQLite3
 Version: @@pinclude_version@@
-Libs: -Wl,-rpath,${libdir} -L${libdir} -lpsqlite -lsqlite3
+Requires: sqlite3
+Libs: -Wl,-rpath,${libdir} -L${libdir} -lpsqlite
 Cflags: -I${includedir} 
 URL: http://dabbelt.com/~palmer/software/psqlite/
