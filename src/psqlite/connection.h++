@@ -66,58 +66,58 @@ namespace psqlite {
          * methods. */
         result::ptr select(const table::ptr& table);
         result::ptr select(const table::ptr& table,
-                          const std::vector<column::ptr>& c);
+                           const std::vector<column::ptr>& c);
         result::ptr select(const table::ptr& table,
-                          const char *format,
-                          ...);
+                           const char *format,
+                           ...);
         result::ptr select(const table::ptr& table,
-                          const char *format,
-                          va_list args);
+                           const char *format,
+                           va_list args);
         result::ptr select(const table::ptr& table,
-                          const std::vector<column::ptr>& c,
-                          const char *format,
-                          ...);
+                           const std::vector<column::ptr>& c,
+                           const char *format,
+                           ...);
         result::ptr select(const table::ptr& table,
-                          const std::vector<column::ptr>& c,
-                          const char *format,
-                          va_list args);
+                           const std::vector<column::ptr>& c,
+                           const char *format,
+                           va_list args);
 
         /* Runs a INSERT query against the given table, returning
          * a list of results that come back from the SQLite server
          * (note that I expect this to be none...). */
         result::ptr insert(const table::ptr& table,
-                          const row::ptr& row);
+                           const row::ptr& row);
 
         /* Runs a REPLACE query against the given table, returning
          * a list of results that come back from the SQLite server
          * (note that I expect this to be none...). */
         result::ptr replace(const table::ptr& table,
-                           const row::ptr& row,
-                           const char *format,
-                           ...);
+                            const row::ptr& row,
+                            const char *format,
+                            ...);
         result::ptr replace(const table::ptr& table,
-                           const row::ptr& row,
-                           const char *format,
-                           va_list args);
+                            const row::ptr& row,
+                            const char *format,
+                            va_list args);
 
         /* Removes any matching entries. */
         result::ptr remove(const table::ptr& table,
-                          const char *format,
-                          ...);
+                           const char *format,
+                           ...);
         result::ptr remove(const table::ptr& table,
-                          const char *format,
-                          va_list args);
+                           const char *format,
+                           va_list args);
 
         /* Sets the given columns to NULL in the matching
          * rows. */
         result::ptr clear(const table::ptr& table,
-                         const std::vector<std::string>& cols,
-                         const char *format,
-                         ...);
+                          const std::vector<std::string>& cols,
+                          const char *format,
+                          ...);
         result::ptr clear(const table::ptr& table,
-                         const std::vector<std::string>& cols,
-                         const char *format,
-                         va_list args);
+                          const std::vector<std::string>& cols,
+                          const char *format,
+                          va_list args);
 
         /* You can ask for two sorts of transactions on a
          * database: either a write-only lock or a read-write
