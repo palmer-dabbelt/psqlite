@@ -69,14 +69,14 @@ namespace psqlite {
                            const std::vector<column::ptr>& c);
         result::ptr select(const table::ptr& table,
                            const char *format,
-                           ...);
+                           ...) __attribute__(( format(printf, 3, 4) ));
         result::ptr select(const table::ptr& table,
                            const char *format,
                            va_list args);
         result::ptr select(const table::ptr& table,
                            const std::vector<column::ptr>& c,
                            const char *format,
-                           ...);
+                           ...) __attribute__(( format(printf, 4, 5) ));
         result::ptr select(const table::ptr& table,
                            const std::vector<column::ptr>& c,
                            const char *format,
@@ -94,7 +94,7 @@ namespace psqlite {
         result::ptr replace(const table::ptr& table,
                             const row::ptr& row,
                             const char *format,
-                            ...);
+                            ...) __attribute__(( format(printf, 4, 5) ));
         result::ptr replace(const table::ptr& table,
                             const row::ptr& row,
                             const char *format,
@@ -113,7 +113,7 @@ namespace psqlite {
         result::ptr clear(const table::ptr& table,
                           const std::vector<std::string>& cols,
                           const char *format,
-                          ...);
+                          ...) __attribute__(( format(printf, 4, 5) ));
         result::ptr clear(const table::ptr& table,
                           const std::vector<std::string>& cols,
                           const char *format,
