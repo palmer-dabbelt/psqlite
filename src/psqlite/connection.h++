@@ -126,6 +126,9 @@ namespace psqlite {
         psqlite::immediate_transaction::ptr immediate_transaction(void);
         psqlite::deferred_transaction::ptr deferred_transaction(void);
 
+        /* Creates a new table */
+        result::ptr create(const table::ptr& table);
+
     protected:
         /* This is really only allowed to be called from transaction. */
         friend class transaction;

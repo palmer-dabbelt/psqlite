@@ -20,7 +20,9 @@
  */
 
 #include "connection.h++"
+#include <iterator>
 #include <map>
+#include <sstream>
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
@@ -635,6 +637,44 @@ connection::deferred_transaction(void)
     auto ntr = std::make_shared<psqlite::deferred_transaction>(this);
     _tr = ntr;
     return ntr;
+}
+
+result::ptr connection::create(const table::ptr& table)
+{
+    std::ostringstream ss;
+
+    ss << "CREATE TABLE IF NOT EXISTS " << table->name() << " (";
+    {
+        std::vector<std::string> col_names;
+        for (const auto& col: table->columns()) {
+            col_names.push_back(col->name());
+            col_names.push_back(", ");
+        }
+        col_names.erase(col_names.begin() + (col_names.size() - 1));
+        copy(col_names.begin(),
+             col_names.end(),
+             std::ostream_iterator<std::string>(ss, ""));
+    }
+    ss << ");";
+
+#ifdef DEBUG_SQLITE_COMMANDS
+    fprintf(stderr, "command: '%s'\n", ss.str().c_str());
+#endif
+
+    auto out = std::make_shared<result>();
+    struct sqlite3_exec_args args;
+    char *error_string = NULL;
+    args.result_ptr = out;
+    int error = sqlite3_exec(_db,
+                             ss.str().c_str(),
+                             &sqlite3_exec_func,
+                             &args,
+                             &error_string);
+    if (error_string == NULL)
+        error_string = (char *)"";
+    out->set_error(error, error_string);
+
+    return out;
 }
 
 result::ptr connection::commit_transaction(void)
