@@ -66,7 +66,7 @@ result::ptr connection::select(const table::ptr& table)
 
 
 result::ptr connection::select(const table::ptr& table,
-                                              const char * format, ...)
+                               const char * format, ...)
 {
     va_list args; va_start(args, format);
     auto out = select(table, format, args);
@@ -75,16 +75,16 @@ result::ptr connection::select(const table::ptr& table,
 }
 
 result::ptr connection::select(const table::ptr& table,
-                                              const char * format,
-                                              va_list args)
+                               const char * format,
+                               va_list args)
 {
     return select(table, table->columns(), format, args);
 }
 
 result::ptr connection::select(const table::ptr& table,
-                                              const std::vector<column::ptr>& c,
-                                              const char *format,
-                                              va_list args)
+                               const std::vector<column::ptr>& c,
+                               const char *format,
+                               va_list args)
 {
     /* It turns out that SQLite provides a mechanism for eliminating
      * SQL injection attacks, but it conflicts with GCC's printf-like
