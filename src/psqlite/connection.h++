@@ -82,6 +82,25 @@ namespace psqlite {
                            const char *format,
                            va_list args);
 
+        /* Exactly like select(), but just returns the count instead. */
+        result::ptr count(const table::ptr& table);
+        result::ptr count(const table::ptr& table,
+                          const std::vector<column::ptr>& c);
+        result::ptr count(const table::ptr& table,
+                          const char *format,
+                          ...) __attribute__(( format(printf, 3, 4) ));
+        result::ptr count(const table::ptr& table,
+                          const char *format,
+                          va_list args);
+        result::ptr count(const table::ptr& table,
+                          const std::vector<column::ptr>& c,
+                          const char *format,
+                          ...) __attribute__(( format(printf, 4, 5) ));
+        result::ptr count(const table::ptr& table,
+                          const std::vector<column::ptr>& c,
+                          const char *format,
+                          va_list args);
+
         /* Runs a INSERT query against the given table, returning
          * a list of results that come back from the SQLite server
          * (note that I expect this to be none...). */

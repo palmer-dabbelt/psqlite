@@ -161,6 +161,109 @@ result::ptr connection::select(const table::ptr& table,
     return out;
 }
 
+result::ptr connection::count(const table::ptr& table)
+{
+    return count(table, "'true'='true'");
+}
+
+
+result::ptr connection::count(const table::ptr& table,
+                              const char * format, ...)
+{
+    va_list args; va_start(args, format);
+    auto out = count(table, format, args);
+    va_end(args);
+    return out;
+}
+
+result::ptr connection::count(const table::ptr& table,
+                              const char * format,
+                              va_list args)
+{
+    return count(table, table->columns(), format, args);
+}
+
+result::ptr connection::count(const table::ptr& table,
+                              const std::vector<column::ptr>& c,
+                              const char *format,
+                              va_list args)
+{
+    /* It turns out that SQLite provides a mechanism for eliminating
+     * SQL injection attacks, but it conflicts with GCC's printf-like
+     * format string checker.  Thus I work around the problem by
+     * simply converting everything to injection-proof right here. */
+    char *nformat = new char[strlen(format) + 1];
+    strcpy(nformat, format);
+    for (size_t i = 0; i < strlen(nformat); ++i)
+        if (strncmp(nformat + i, "%s",  2) == 0)
+            nformat[i+1] = 'q';
+
+    /* Here we format the string to avoid injection attacks. */
+    va_list sargs; va_copy(sargs, args);
+    char test_args[2];
+    size_t query_length = vsnprintf(test_args, 2, format, sargs) + 1;
+    char *query = new char[query_length];
+    sqlite3_vsnprintf(query_length, query, nformat, args);
+
+    /* That's not the whole SQL command, we also need the "SELECT (...)
+     * FROM ..." part.  */
+    size_t column_length = 2;
+    for (const auto& column: c)
+        column_length += strlen("COUNT( ),  ") + strlen(column->name().c_str());
+    char *column_spec = new char[column_length];
+    column_spec[0] = '\0';
+    for (const auto& column: c) {
+        strcat(column_spec, "COUNT(");
+        strcat(column_spec, column->name().c_str());
+        strcat(column_spec, "), ");
+    }
+    column_spec[strlen(column_spec)-2] = '\0';
+
+    /* Now we can assemble the final SQL query string. */
+    size_t command_length =
+        strlen("SELECT ")
+        + strlen(column_spec)
+        + strlen(" FROM ")
+        + strlen(table->name().c_str())
+        + strlen(" WHERE ")
+        + strlen(query)
+        + 2;
+    char *command = new char[command_length];
+    sprintf(command, "SELECT %s FROM %s WHERE %s;",
+            column_spec,
+            table->name().c_str(),
+            query);
+#ifdef DEBUG_SQLITE_COMMANDS
+    fprintf(stderr, "command: '%s'\n", command);
+#endif
+
+    /* SQLite fills out an argument pointer, so we need one
+     * created. */
+    auto out = std::make_shared<result>();
+
+    /* At this point the SQL query can actually be run. */
+    {
+        struct sqlite3_exec_args args;
+        char *error_string = NULL;
+        args.result_ptr = out;
+        int error = sqlite3_exec(_db,
+                                 command,
+                                 &sqlite3_exec_func,
+                                 &args,
+                                 &error_string);
+        if (error_string == NULL)
+            error_string = (char *)"";
+        out->set_error(error, error_string);
+    }
+
+    /* Finally we can clean up those allocated strings and return! */
+    delete[] nformat;
+    delete[] query;
+    delete[] column_spec;
+    delete[] command;
+    return out;
+}
+
 result::ptr connection::insert(const table::ptr& table,
                                               const row::ptr& row)
 {
