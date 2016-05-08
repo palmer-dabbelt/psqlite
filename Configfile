@@ -10,6 +10,10 @@ COMPILEOPTS += -pedantic
 COMPILEOPTS += -std=c++11
 COMPILEOPTS += -Werror
 
+LANGUAGES   += c++
+COMPILEOPTS += `ppkg-config sqlite3 --cflags`
+LINKOPTS    += `ppkg-config sqlite3 --libs`
+
 LANGUAGES   += pkgconfig
 LINKOPTS    += -Sobj/proc/version-pc.sed
 
