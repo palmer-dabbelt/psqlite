@@ -21,6 +21,7 @@
 
 #include "transaction.h++"
 #include "connection.h++"
+#include <stdlib.h>
 using namespace psqlite;
 
 transaction::transaction(connection *conn)
