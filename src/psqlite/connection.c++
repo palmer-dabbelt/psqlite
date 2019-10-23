@@ -59,6 +59,11 @@ connection::connection(const std::string& db_path)
     sqlite3_busy_timeout(_db, 1000);
 }
 
+connection::~connection(void)
+{
+    sqlite3_close(_db);
+}
+
 result::ptr connection::select(const table::ptr& table)
 {
     return select(table, "'true'='true'");

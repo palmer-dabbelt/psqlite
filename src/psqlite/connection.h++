@@ -57,6 +57,8 @@ namespace psqlite {
          * full path to the file that contains that database. */
         connection(const std::string& path);
 
+        ~connection(void);
+
     public:
         /* Runs a SELECT query against the given table, returning
          * a list of results that match the query.  Note that
