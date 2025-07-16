@@ -9,6 +9,7 @@ COMPILEOPTS += -Wextra
 COMPILEOPTS += -pedantic
 COMPILEOPTS += -std=c++11
 COMPILEOPTS += -Werror
+COMPILEOPTS += -Wno-deprecated-declarations
 
 LANGUAGES   += c++
 COMPILEOPTS += `ppkg-config sqlite3 --cflags`
